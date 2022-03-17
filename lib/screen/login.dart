@@ -35,6 +35,16 @@ class _loginState extends State<login> {
                    padding: EdgeInsets.all(16),
                    child: Column(
                      children: [
+                       Container(
+                         height: MediaQuery.of(context).size.height*0.1,
+                         decoration: BoxDecoration(
+                             image: DecorationImage(
+                               image: AssetImage(
+                                   'assets/studentregister.png'
+                               ),
+                             )
+                         ),
+                       ),
                        Text('Quizzy',style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 40,color: Colors.white)),),
                        SizedBox(height: 10,),
                        TextField(
@@ -116,7 +126,7 @@ class _loginState extends State<login> {
                           height: MediaQuery.of(context).size.height*0.3,
                           child: Image(
                             image: AssetImage(
-                                'assets/login.png'
+                                'assets/teachersreg.png'
                             ),
                           )
                       ),
