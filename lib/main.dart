@@ -1,7 +1,15 @@
 import 'package:cloud/screen/login.dart';
+import 'package:cloud/service/authservice.dart';
+import 'package:cloud/wrappers/authwrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'models/Usermodel.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -11,8 +19,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: login(),
-    );
+    return  StreamProvider<User?>.value(value: authService().user,catchError:(_,__){},  initialData: null,
+      child:MaterialApp(
+      home: authwrapper(),
+    ));
   }
 }
