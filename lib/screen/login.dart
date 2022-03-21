@@ -109,6 +109,7 @@ class _loginState extends State<login> {
                                   setState(() {
                                     if(result==null){
                                       error='Login Faild';
+                                      loading=false;
                                     }else{
                                       error="";
                                       loading=false;

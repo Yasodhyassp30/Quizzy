@@ -205,7 +205,7 @@ class _studentregistrationState extends State<studentregistration> {
                                 if(email.text!=""&&password.text!=""&&firstname.text!=""&&lastname.text!=""&&mobile.text!=""&&school.text!="") {
                                   dynamic result = await _auth
                                       .registerwithEmailstudent(
-                                      email.text.trim(),
+                                      email.text.trim().toLowerCase(),
                                       password.text,
                                       lastname.text,
                                       firstname.text,

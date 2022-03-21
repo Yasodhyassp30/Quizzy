@@ -210,7 +210,7 @@ class _teacherregState extends State<teacherreg> {
                                 if(email.text!=""&&password.text!=""&&firstname.text!=""&&lastname.text!=""&&mobile.text!=""&&subject.text!="") {
                                   dynamic result = await _auth
                                       .registerwithEmailteacher(
-                                      email.text.trim(),
+                                      email.text.trim().toLowerCase(),
                                       password.text,
                                       lastname.text,
                                       firstname.text,

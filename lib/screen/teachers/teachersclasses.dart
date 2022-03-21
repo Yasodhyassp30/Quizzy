@@ -1,4 +1,5 @@
 import 'package:cloud/loadingscreens/loadingscreen.dart';
+import 'package:cloud/screen/teachers/classdetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +19,8 @@ class _teacherclassesState extends State<teacherclasses> {
   @override
   FirebaseFirestore store =FirebaseFirestore.instance;
   FirebaseAuth _auth =FirebaseAuth.instance;
+  bool added=false;
+  TextEditingController title =TextEditingController();
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(future:store.collection('userdata').doc(_auth.currentUser!.uid).get() ,builder: (context,snap){
       if(snap.connectionState==ConnectionState.waiting){
@@ -27,7 +30,58 @@ class _teacherclassesState extends State<teacherclasses> {
 
         return Scaffold(
           floatingActionButton: FloatingActionButton(
-            onPressed: (){},
+            onPressed: (){
+              showDialog(context: context, builder: (BuildContext context) {
+                return  AlertDialog(
+                  title: Text("Create Classroom"),
+                  content: TextField(
+                    controller: title,
+                    decoration: InputDecoration(
+                        border:OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "Classroom name",
+                        hintStyle:
+                        TextStyle(color: Colors.grey, fontSize: 18.0)
+                    ),
+                  ),
+                  actions: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          Expanded(child: ElevatedButton(onPressed: ()async{
+                            if(title.text.isNotEmpty){
+                              store.collection('classrooms').add({
+                                'title':title.text.trim(),
+                                'teacher':_auth.currentUser!.uid,
+                                'students':[],
+                                'invited':[]
+                              });
+                              setState(() {
+                                added=true;
+                              });
+                            }
+                            Navigator.pop(context);
+
+                          }, child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Text("Create"),
+                          )))
+                        ],
+                      ),
+                    )
+                  ],
+                );
+              });
+             if(added){
+               setState(() {
+                added =!added;
+               });
+             }
+            },
             child: Icon(
               Icons.add,size: 30,
             ),
@@ -45,6 +99,7 @@ class _teacherclassesState extends State<teacherclasses> {
                 child: SingleChildScrollView(
                   child: Container(
                     child: Column(
+
                       children: [
                         Container(
                             padding: EdgeInsets.all(25),
@@ -103,6 +158,75 @@ class _teacherclassesState extends State<teacherclasses> {
                             )
                         ),
 
+                        SizedBox(height: 40,),
+
+                        Text('Groups',style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 30,color: Colors.lightBlue[300])),),
+
+                       Container(
+                         height: MediaQuery.of(context).size.height*0.6,
+                         padding: EdgeInsets.all(20),
+                         child:  FutureBuilder<QuerySnapshot>(future: store.collection('classrooms').where('teacher',isEqualTo: _auth.currentUser!.uid).get(),builder: (context,snap){
+                           if(snap.connectionState==ConnectionState.waiting){
+                             return loadfadingcube();
+                           }else{
+                             List classdata=[];
+                             if(snap.data!=null){
+                               classdata =snap.data!.docs as List;
+                             }
+                             return ListView.builder(itemCount: classdata.length,
+                                 scrollDirection: Axis.vertical,
+                                 shrinkWrap: true,
+                                 physics: ScrollPhysics(),
+                                 itemBuilder: (context,i){
+                                   return Column(
+                                     children: [
+
+                                       Container(
+                                         width: MediaQuery.of(context).size.width*0.9,
+                                         padding: EdgeInsets.all(10),
+                                         decoration: BoxDecoration(
+                                             color: Colors.lightBlue[800],
+                                             borderRadius: BorderRadius.circular(15)
+
+                                         ),
+                                         child:Row(
+                                           children: [
+                                             Column(
+                                               crossAxisAlignment: CrossAxisAlignment.start,
+                                               children: [
+                                                 Container(
+                                                   width:MediaQuery.of(context).size.width*0.6,
+                                                   height: MediaQuery.of(context).size.height*0.05,
+                                                   child: Text(classdata[i]['title'],style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20,color: Colors.white,overflow:TextOverflow.ellipsis)),),
+                                                 ),
+                                                 Text('Students : ${classdata[i]['students'].length}',style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 15,color: Colors.white)),),
+                                               ],
+                                             ),
+                                            Expanded(child: SizedBox()),
+                                             IconButton(onPressed: (){
+                                               Navigator.push(
+                                                 context,
+                                                 MaterialPageRoute(builder: (context) => classroomdetails(classdetails: classdata[i],)),
+                                               );
+                                               setState(() {
+
+                                               });
+
+                                             }, icon: Icon(
+                                                 Icons.more_horiz,size: 40,color: Colors.lightBlue[100],
+                                             ))
+                                           ],
+                                         )
+                                       ),
+                                       SizedBox(height: 10.0,),
+                                     ],
+                                   );
+                                 });
+
+                           }
+                         }),
+                       )
+
                       ],
                     ),
                   ),
@@ -115,4 +239,5 @@ class _teacherclassesState extends State<teacherclasses> {
 
     });
   }
+
 }

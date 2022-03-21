@@ -1,4 +1,6 @@
 import 'package:cloud/loadingscreens/loadingscreen.dart';
+import 'package:cloud/screen/student/studentclassdetails.dart';
+import 'package:cloud/screen/student/studentnotifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../login.dart';
+import '../teachers/classdetails.dart';
 
 class studentclasses extends StatefulWidget {
   const studentclasses({Key? key}) : super(key: key);
@@ -18,6 +21,8 @@ class _studentclassesState extends State<studentclasses> {
   @override
   FirebaseFirestore store =FirebaseFirestore.instance;
   FirebaseAuth _auth =FirebaseAuth.instance;
+  bool changed=false;
+ final  CollectionReference ref= FirebaseFirestore.instance.collection('notifications');
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(future:store.collection('userdata').doc(_auth.currentUser!.uid).get() ,builder: (context,snap){
       if(snap.connectionState==ConnectionState.waiting){
@@ -74,6 +79,39 @@ class _studentclassesState extends State<studentclasses> {
                               ),
                             ),
                             Expanded(child: SizedBox()),
+                            StreamBuilder<DocumentSnapshot>(stream:ref.doc(data['uid']).snapshots(),builder: (context,snapdata){
+                              if(snapdata.connectionState==ConnectionState.waiting){
+                              }else{
+                                for(int i=0;i<snapdata.data!.get('notifications').length;i++){
+                                  if(snapdata.data!.get('notifications')[i]['new']){
+                                    changed=true;
+                                    break;
+                                  }
+                                  changed=false;
+                                }
+                              }
+                              if(changed){
+                                return IconButton(onPressed: ()async{
+                                  List notify = snapdata.data!.get('notifications');
+                                  notify.forEach((element) {element['new']=false; });
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => notifcationsstudents()),
+                                  );
+                                  await store.collection('notifications').doc(data['uid']).set({'notifications':notify});
+
+                                }, icon: Icon(Icons.notifications_active));
+                              }else {
+                                return IconButton(onPressed: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => notifcationsstudents()),
+                                  );
+                                },
+                                    icon: Icon(Icons.notifications));
+                              }
+                            }),
+                            Expanded(child: SizedBox()),
                             OutlinedButton(onPressed: ()async{
                               FirebaseAuth _auth =FirebaseAuth.instance;
                               await _auth.signOut();
@@ -95,6 +133,70 @@ class _studentclassesState extends State<studentclasses> {
                           ],
                         )
                     ),
+                    Container(
+                      height: MediaQuery.of(context).size.height*0.6,
+                      padding: EdgeInsets.all(20),
+                      child:  FutureBuilder<QuerySnapshot>(future: store.collection('classrooms').where('students',arrayContains: _auth.currentUser!.uid).get(),builder: (context,snap){
+                        if(snap.connectionState==ConnectionState.waiting){
+                          return loadfadingcube();
+                        }else{
+                          List classdata=[];
+                          if(snap.data!=null){
+                            classdata =snap.data!.docs as List;
+                          }
+                          return ListView.builder(itemCount: classdata.length,
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              itemBuilder: (context,i){
+                                return Column(
+                                  children: [
+
+                                    Container(
+                                        width: MediaQuery.of(context).size.width*0.9,
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            color: Colors.lightBlue[800],
+                                            borderRadius: BorderRadius.circular(15)
+
+                                        ),
+                                        child:Row(
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width:MediaQuery.of(context).size.width*0.6,
+                                                  height: MediaQuery.of(context).size.height*0.05,
+                                                  child: Text(classdata[i]['title'],style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 20,color: Colors.white,overflow:TextOverflow.ellipsis)),),
+                                                ),
+                                                Text('Students : ${classdata[i]['students'].length}',style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 15,color: Colors.white)),),
+                                              ],
+                                            ),
+                                            Expanded(child: SizedBox()),
+                                            IconButton(onPressed: (){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => studentclassdetails(classdetails: classdata[i],)),
+                                              );
+                                              setState(() {
+
+                                              });
+
+                                            }, icon: Icon(
+                                              Icons.more_horiz,size: 40,color: Colors.lightBlue[100],
+                                            ))
+                                          ],
+                                        )
+                                    ),
+                                    SizedBox(height: 10.0,),
+                                  ],
+                                );
+                              });
+
+                        }
+                      }),
+                    )
 
                   ],
                 ),

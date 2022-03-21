@@ -6,6 +6,8 @@ class databaseService{
   databaseService({this.uid});
 
   final CollectionReference userdetails = FirebaseFirestore.instance.collection('userdata');
+  final CollectionReference classrooms = FirebaseFirestore.instance.collection('classrooms');
+  final CollectionReference notifications = FirebaseFirestore.instance.collection('notifications');
 
 
   Future ? setTeacherdata(String ?firstname,String ? lastname, String ?Phoneno, String ?email,List<String>classes,String subject) async {
@@ -17,7 +19,6 @@ class databaseService{
           'lastname':lastname,
           'Contact_No': Phoneno,
           'Email': email,
-          "classes":[],
           "subject":subject
         }
     );
@@ -31,9 +32,31 @@ class databaseService{
           'lastname':lastname,
           'Contact_No': Phoneno,
           'Email': email,
-          "classes":[],
           "school":school
         }
     );
+  }
+  Future invitestudent(String studentuid,String classroomid,String classroomname)async{
+    FirebaseFirestore store =FirebaseFirestore.instance;
+    await classrooms.doc(classroomid).set({
+      'invited':FieldValue.arrayUnion([studentuid])
+    },SetOptions(merge: true));
+    await notifications.doc(studentuid).set({
+      'notifications':FieldValue.arrayUnion([
+        {
+          'title':classroomname,
+          'classroomid':classroomid,
+          'date':DateTime.now(),
+          'new':true,
+          'temp':false
+        }
+      ])
+    },SetOptions(merge: true));
+
+
+  }
+  Future accpetinvite(String classid,String studentid,Map e )async{
+   await classrooms.doc(classid).update({'students':FieldValue.arrayUnion([studentid]),'invited':FieldValue.arrayRemove([studentid])});
+   await notifications.doc(studentid).update({'notifications':FieldValue.arrayRemove([e])});
   }
 }
