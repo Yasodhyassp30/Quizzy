@@ -82,11 +82,14 @@ class _studentclassesState extends State<studentclasses> {
                             StreamBuilder<DocumentSnapshot>(stream:ref.doc(data['uid']).snapshots(),builder: (context,snapdata){
                               if(snapdata.connectionState==ConnectionState.waiting){
                               }else{
+                                try{
                                 for(int i=0;i<snapdata.data!.get('notifications').length;i++){
-                                  if(snapdata.data!.get('notifications')[i]['new']){
-                                    changed=true;
+
+                                  if(snapdata.data!.get('notifications')[i]['new']) {
+                                    changed = true;
                                     break;
                                   }
+                                }}catch(e){
                                   changed=false;
                                 }
                               }
@@ -107,6 +110,9 @@ class _studentclassesState extends State<studentclasses> {
                                     context,
                                     MaterialPageRoute(builder: (context) => notifcationsstudents()),
                                   );
+                                  setState(() {
+
+                                  });
                                 },
                                     icon: Icon(Icons.notifications));
                               }

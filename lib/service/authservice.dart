@@ -37,7 +37,7 @@ class authService{
       User? newuser = result.user;
       databaseService d1= databaseService(uid: newuser!.uid);
       d1.setTeacherdata(firstname, lastname, Phoneno, email, classes, subject);
-      await newuser.updateDisplayName(firstname+lastname);
+      await newuser.updateDisplayName(firstname+" "+lastname);
       return _userFromfirebase(newuser);
     } catch (e) {
       print(e.toString());
@@ -52,7 +52,7 @@ class authService{
       User? newuser = result.user;
       databaseService d1= databaseService(uid: newuser!.uid);
       d1.setstudentdata(firstname, lastname, Phoneno, email, classes, school);
-      await newuser.updateDisplayName(firstname+lastname);
+      await newuser.updateDisplayName(firstname+" "+lastname);
       return _userFromfirebase(newuser);
     } catch (e) {
       print(e.toString());

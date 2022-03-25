@@ -1,9 +1,12 @@
 import 'package:cloud/screen/teachers/classdetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../loadingscreens/loadingscreen.dart';
+import '../common/groupmsg.dart';
+import '../common/messaging.dart';
 import '../teachers/addstudent.dart';
 
 class studentclassdetails extends StatefulWidget {
@@ -17,6 +20,7 @@ class studentclassdetails extends StatefulWidget {
 class _studentclassdetailsState extends State<studentclassdetails> {
   List studentdata = [];
   FirebaseFirestore store = FirebaseFirestore.instance;
+  FirebaseAuth _auth =FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +172,10 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                       ),
                                                       IconButton(
                                                           onPressed: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(builder: (context) => messagingprivate(reciver: ownerdata,)),
+                                                            );
 
                                                           }, icon: Icon(
                                                         Icons.messenger,
@@ -282,26 +290,44 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                                           overflow: TextOverflow
                                                                               .ellipsis)),),
                                                               ),
+                                                              (studentdata[i]['uid']==_auth.currentUser!.uid)?Text(
+                                                               '(You)',
+                                                                style: GoogleFonts
+                                                                    .lato(
+                                                                    textStyle: TextStyle(
+                                                                        fontSize: 20,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        overflow: TextOverflow
+                                                                            .ellipsis)),):Container()
                                                             ],
                                                           ),
-                                                          IconButton(
-                                                              onPressed: () {
+                                                          (studentdata[i]['uid']!=_auth.currentUser!.uid)?
+                                                          Row(
+                                                            children: [
+                                                              IconButton(
+                                                                  onPressed: () {
+                                                                    Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(builder: (context) => messagingprivate(reciver: studentdata[i],)),
+                                                                    );
+                                                                  }, icon: Icon(
+                                                                Icons.messenger,
+                                                                size: 30,
+                                                                color: Colors
+                                                                    .lightBlue[100],
+                                                              )),
+                                                              IconButton(
+                                                                  onPressed: () {
 
-                                                              }, icon: Icon(
-                                                            Icons.messenger,
-                                                            size: 30,
-                                                            color: Colors
-                                                                .lightBlue[100],
-                                                          )),
-                                                          IconButton(
-                                                              onPressed: () {
-
-                                                              }, icon: Icon(
-                                                            Icons.more_horiz,
-                                                            size: 30,
-                                                            color: Colors
-                                                                .lightBlue[100],
-                                                          ))
+                                                                  }, icon: Icon(
+                                                                Icons.more_horiz,
+                                                                size: 30,
+                                                                color: Colors
+                                                                    .lightBlue[100],
+                                                              ))
+                                                            ],
+                                                          ):Container()
                                                         ],
                                                       ),
 
@@ -322,7 +348,12 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                       .spaceEvenly,
                                   children: [
                                     ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => groupmsging(classroomid:widget.classdetails.id,classname: widget.classdetails['title'],)),
+                                        );
+                                      },
                                       child: Icon(
                                           Icons.messenger, color: Colors.white),
                                       style: ElevatedButton.styleFrom(

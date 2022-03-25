@@ -21,7 +21,9 @@ class _notifcationsstudentsState extends State<notifcationsstudents> {
      if(snap.connectionState==ConnectionState.waiting){
 
      }else{
-       notifications=snap.data!.get('notifications');
+      if(snap.data?.data()!=null){
+        notifications=snap.data!.get('notifications');
+      }
      }
       return Scaffold(
         body: ConstrainedBox(

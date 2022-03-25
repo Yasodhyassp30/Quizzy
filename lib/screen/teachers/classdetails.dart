@@ -1,5 +1,9 @@
 import 'package:cloud/loadingscreens/loadingscreen.dart';
+import 'package:cloud/screen/common/groupmsg.dart';
+import 'package:cloud/screen/common/messaging.dart';
+import 'package:cloud/screen/student/materialupload.dart';
 import 'package:cloud/screen/teachers/addstudent.dart';
+import 'package:cloud/screen/teachers/teachersLM.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -106,6 +110,10 @@ class _classroomdetailsState extends State<classroomdetails> {
                                                         ],
                                                       ),
                                                       IconButton(onPressed: (){
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(builder: (context) => messagingprivate(reciver: studentdata[i],)),
+                                                        );
 
                                                       }, icon: Icon(
                                                         Icons.messenger,size: 30,color: Colors.lightBlue[100],
@@ -134,22 +142,29 @@ class _classroomdetailsState extends State<classroomdetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => groupmsging(classroomid:widget.classdetails.id,classname: widget.classdetails['title'])),
+                                    );
+                                  },
                                   child: Icon(Icons.messenger, color: Colors.white),
                                   style: ElevatedButton.styleFrom(
                                     shape: CircleBorder(),
                                     padding: EdgeInsets.all(20),
-                                    primary: Colors.cyan[300],
+                                    primary: Colors.blue[300],
                                     onPrimary: Colors.yellow,
                                   ),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {},
-                                  child: Icon(Icons.cloud_upload, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>lmsteachers(classdetails: widget.classdetails,)));
+                                  },
+                                  child: Icon(Icons.drive_file_move, color: Colors.white),
                                   style: ElevatedButton.styleFrom(
                                     shape: CircleBorder(),
                                     padding: EdgeInsets.all(20),
-                                    primary: Colors.lightBlue,
+                                    primary: Colors.blue,
                                     onPrimary: Colors.red,
                                   ),
                                 ),
@@ -165,7 +180,7 @@ class _classroomdetailsState extends State<classroomdetails> {
                                   style: ElevatedButton.styleFrom(
                                     shape: CircleBorder(),
                                     padding: EdgeInsets.all(20),
-                                    primary: Colors.blue,
+                                    primary: Colors.blue[700],
                                     onPrimary: Colors.black,
                                   ),
                                 ),
@@ -175,7 +190,7 @@ class _classroomdetailsState extends State<classroomdetails> {
                                   style: ElevatedButton.styleFrom(
                                     shape: CircleBorder(),
                                     padding: EdgeInsets.all(20),
-                                    primary: Colors.deepPurpleAccent,
+                                    primary: Colors.blue[900],
                                     onPrimary: Colors.red,
                                   ),
                                 ),
