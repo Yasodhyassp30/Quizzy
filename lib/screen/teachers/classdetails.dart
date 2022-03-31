@@ -87,8 +87,8 @@ class _classroomdetailsState extends State<classroomdetails> {
                                                   Row(
                                                     children: [
                                                       Container(
-                                                        height: 80,
-                                                        width: 80,
+                                                        height: MediaQuery.of(context).size.width*0.15,
+                                                        width: MediaQuery.of(context).size.width*0.15,
                                                         decoration: BoxDecoration(
                                                             shape: BoxShape.circle,
                                                             color: Colors.white,
@@ -169,11 +169,14 @@ class _classroomdetailsState extends State<classroomdetails> {
                                   ),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
+                                  onPressed: () async{
+                                   await Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => studentadd(classroomid: widget.classdetails,)),
                                     );
+                                   setState(() {
+
+                                   });
 
                                   },
                                   child: Icon(Icons.add, color: Colors.white),

@@ -137,7 +137,6 @@ class _teacherregState extends State<teacherreg> {
                           SizedBox(height: 10.0,),
                           TextField(
                             controller: subject,
-                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                                 border:OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),

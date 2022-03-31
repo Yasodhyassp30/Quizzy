@@ -29,20 +29,22 @@ class _chatstudentsState extends State<chatstudents> {
         if(snapshot.connectionState==ConnectionState.waiting){
           return loadfadingcube();
         }else{
-          data=snapshot.data!.data() as Map;
+          if(snapshot.data?.data()!=null){
+            data=snapshot.data!.data() as Map;
 
-          data.forEach((key, value) {
-            profiles.add(key);
-            Map map =new Map();
-            map['reciver']=key;
-            map['messages']=value;
-            order.add(map);
-          });
-          order.sort((a,b){
-            var date1=a['messages'][a['messages'].length-1]['time'];
-            var date2=b['messages'][b['messages'].length-1]['time'];
-            return date2.compareTo(date1);
-          });
+            data.forEach((key, value) {
+              profiles.add(key);
+              Map map =new Map();
+              map['reciver']=key;
+              map['messages']=value;
+              order.add(map);
+            });
+            order.sort((a,b){
+              var date1=a['messages'][a['messages'].length-1]['time'];
+              var date2=b['messages'][b['messages'].length-1]['time'];
+              return date2.compareTo(date1);
+            });
+          }
           return Scaffold(
             body: ConstrainedBox(
               constraints: new BoxConstraints(
@@ -92,7 +94,7 @@ class _chatstudentsState extends State<chatstudents> {
                           ),))
                         ],
                       ),
-                      Container(
+                      (order.length>0)?Container(
                           height: MediaQuery.of(context).size.height*0.7,
                           width: MediaQuery.of(context).size.width*0.9,
                           padding: EdgeInsets.all(20),
@@ -128,8 +130,8 @@ class _chatstudentsState extends State<chatstudents> {
                                                 Row(
                                                   children: [
                                                     Container(
-                                                      height: 80,
-                                                      width: 80,
+                                                      height: MediaQuery.of(context).size.width*0.15,
+                                                      width: MediaQuery.of(context).size.width*0.15,
                                                       decoration: BoxDecoration(
                                                           shape: BoxShape.circle,
                                                           color: Colors.white,
@@ -176,7 +178,7 @@ class _chatstudentsState extends State<chatstudents> {
 
                           })
 
-                      )
+                      ):Container()
                     ],
                   ),
                 ),

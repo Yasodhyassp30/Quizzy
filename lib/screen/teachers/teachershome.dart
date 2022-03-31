@@ -1,4 +1,5 @@
 import 'package:cloud/screen/common/chatlist.dart';
+import 'package:cloud/screen/teachers/quizzestecher.dart';
 import 'package:cloud/screen/teachers/teachersclasses.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,8 @@ class _teachershomeState extends State<teachershome> {
   int _selected=0;
   static const List<Widget> _options=<Widget>[
     teacherclasses(),
-    chatlists()
+    chatlists(),
+    typeselection()
 
 
   ];
@@ -55,14 +57,14 @@ class _teachershomeState extends State<teachershome> {
 
 
             BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: "Classes",
+              icon: Icon(Icons.assignment),
+              label: "Quizzes",
 
             ),
 
             BottomNavigationBarItem(
-              icon: Icon(Icons.assignment),
-              label: "Quizzes",
+              icon: Icon(Icons.insert_chart),
+              label: "Statistics",
 
             )
           ],

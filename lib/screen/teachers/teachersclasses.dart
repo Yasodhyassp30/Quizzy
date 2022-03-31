@@ -58,7 +58,8 @@ class _teacherclassesState extends State<teacherclasses> {
                                 'title':title.text.trim(),
                                 'teacher':_auth.currentUser!.uid,
                                 'students':[],
-                                'invited':[]
+                                'invited':[],
+                                'requested':[]
                               });
                               setState(() {
                                 added=true;
@@ -110,10 +111,12 @@ class _teacherclassesState extends State<teacherclasses> {
 
                             ),
                             child:Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  height: 80,
-                                  width: 80,
+                                  height: MediaQuery.of(context).size.width*0.15,
+                                  width: MediaQuery.of(context).size.width*0.15,
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.white,
@@ -203,8 +206,8 @@ class _teacherclassesState extends State<teacherclasses> {
                                                ],
                                              ),
                                             Expanded(child: SizedBox()),
-                                             IconButton(onPressed: (){
-                                               Navigator.push(
+                                             IconButton(onPressed: ()async{
+                                              await Navigator.push(
                                                  context,
                                                  MaterialPageRoute(builder: (context) => classroomdetails(classdetails: classdata[i],)),
                                                );

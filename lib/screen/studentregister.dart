@@ -132,7 +132,6 @@ class _studentregistrationState extends State<studentregistration> {
                           SizedBox(height: 10.0,),
                           TextField(
                             controller: school,
-                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                                 border:OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),

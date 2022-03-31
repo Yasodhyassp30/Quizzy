@@ -104,7 +104,13 @@ class _notifcationsstudentsState extends State<notifcationsstudents> {
                                                   });
                                                 },  child: Text("Accept")),
                                                 SizedBox(width: 20,),
-                                                ElevatedButton(onPressed: (){},  child: Text("Reject"),
+                                                ElevatedButton(onPressed: ()async{
+                                                  databaseService d1=databaseService(uid: _auth.currentUser!.uid);
+                                                  await d1.rejectinvite(notifications[i]['classroomid'], _auth.currentUser!.uid, notifications[i]);
+                                                  setState(() {
+
+                                                  });
+                                                },  child: Text("Reject"),
                                                   style: ElevatedButton.styleFrom(
                                                     primary: Colors.redAccent,
                                                   ),

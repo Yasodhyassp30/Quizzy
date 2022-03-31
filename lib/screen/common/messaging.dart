@@ -32,7 +32,7 @@ class _messagingprivateState extends State<messagingprivate> {
           child: SafeArea(
             child:SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height*0.96-MediaQuery.of(context).viewInsets.bottom,
+                height: MediaQuery.of(context).size.height*0.9-MediaQuery.of(context).viewInsets.bottom,
                 child: Stack(
                   children: [
                    Positioned(

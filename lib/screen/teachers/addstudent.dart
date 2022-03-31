@@ -1,6 +1,7 @@
 import 'package:cloud/loadingscreens/loadingscreen.dart';
 import 'package:cloud/service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +19,9 @@ class _studentaddState extends State<studentadd> {
   List data=[];
   List invited=[];
   List members=[];
+  List requested =[];
   bool serached=false;
+  FirebaseAuth _auth =FirebaseAuth.instance;
   TextEditingController searchkey =TextEditingController();
   final snackBar = SnackBar(
     content: const Text('Copied!'),
@@ -37,6 +40,7 @@ class _studentaddState extends State<studentadd> {
       }else{
         invited=snap.data!.get('invited');
         members=snap.data!.get('students');
+        requested=snap.data!.get('requested');
         return Scaffold(
           body: ConstrainedBox(
             constraints: new BoxConstraints(
@@ -196,6 +200,10 @@ class _studentaddState extends State<studentadd> {
                                                               width: MediaQuery.of(context).size.width*0.2,
                                                               height: MediaQuery.of(context).size.height*0.05,
                                                               child: Center( child: Text('Invited',style: TextStyle(color: Colors.blue[700]),),)
+                                                          ):(requested.contains(data[i]['uid'])?Container(
+                                                              width: MediaQuery.of(context).size.width*0.2,
+                                                              height: MediaQuery.of(context).size.height*0.05,
+                                                              child: Center( child: Text('Requested',style: TextStyle(color: Colors.blue[700]),),)
                                                           ):IconButton(onPressed: ()async{
                                                             databaseService d1=databaseService(uid: data[i]['uid']);
                                                             await d1.invitestudent(data[i]['uid'], widget.classroomid.id,widget.classroomid['title']);
@@ -205,6 +213,7 @@ class _studentaddState extends State<studentadd> {
 
                                                           }, icon: Icon(Icons.send,size: 30,color: Colors.white,),
                                                           ))
+                                                          )
                                                         ],
                                                       )
                                                   ),
@@ -223,6 +232,7 @@ class _studentaddState extends State<studentadd> {
                           Text('Invite by code',style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 25,color: Colors.blue[600])),),
                          SizedBox(height: 10,),
                          Container(
+                           height: MediaQuery.of(context).size.height*0.1,
                            width: MediaQuery.of(context).size.width*0.9,
                            decoration: BoxDecoration(
                              color: Colors.blue[300],
@@ -245,7 +255,95 @@ class _studentaddState extends State<studentadd> {
                                    , icon: Icon(Icons.copy))
                              ],
                            ),
-                         )
+                         ),
+                          SizedBox(height: 20,),
+                          Text('Join Requests',style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.blue
+                          ),),
+                          SizedBox(height: 10,),
+                          StreamBuilder<DocumentSnapshot>(stream: store.collection('classrooms').doc(widget.classroomid.id).snapshots(),builder: (context,snaprequests){
+                            List Request =[];
+                            if(snaprequests.connectionState !=ConnectionState.waiting){
+                              Request =snaprequests.data!.get('requested');
+                            }
+
+                            return Container(
+                              height: MediaQuery.of(context).size.height*0.3,
+                              width: MediaQuery.of(context).size.width*0.9,
+                              child: ListView.builder(itemCount: Request.length,itemBuilder: (context,i){
+                                return FutureBuilder<DocumentSnapshot>(future: store.collection('userdata').doc(Request[i]).get(),builder: (context,snapuser){
+                                  if(snapuser.connectionState!=ConnectionState.waiting){
+                                    return Container(
+                                        padding: EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(15)
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context).size.width*0.5,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    snapuser.data!.get('firstname') +
+                                                        " " +
+                                                        snapuser.data!.get('lastname'),
+                                                    style: GoogleFonts
+                                                        .lato(
+                                                        textStyle: TextStyle(
+                                                            fontSize: 15,
+                                                            color: Colors
+                                                                .blue,
+                                                            overflow: TextOverflow
+                                                                .ellipsis)),),
+                                                  SizedBox(height: 10,),
+                                                  Row(
+                                                    children: [
+                                                      TextButton(onPressed: ()async{
+                                                        databaseService d1=databaseService(uid: _auth.currentUser!.uid);
+                                                        d1.accpetrequest(widget.classroomid.id, Request[i]);
+                                                      }, child: Text('Accept')),
+                                                      TextButton(onPressed: ()async{
+                                                        databaseService d1=databaseService(uid: _auth.currentUser!.uid);
+                                                        d1.rejectrequest(widget.classroomid.id, Request[i]);
+                                                      }, child: Text('Reject',style: TextStyle(color: Colors.redAccent),))
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(child: SizedBox()),
+                                            Container(
+                                              height: 80,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape
+                                                      .circle,
+                                                  color: Colors
+                                                      .white,
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/studentavatar.png'),
+                                                      fit: BoxFit
+                                                          .fill
+                                                  )
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                    );
+                                  }else{
+                                    return Container();
+                                  }
+
+                                });
+                              }),
+                            );
+                          })
 
 
 

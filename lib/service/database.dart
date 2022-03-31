@@ -59,4 +59,14 @@ class databaseService{
    await classrooms.doc(classid).update({'students':FieldValue.arrayUnion([studentid]),'invited':FieldValue.arrayRemove([studentid])});
    await notifications.doc(studentid).update({'notifications':FieldValue.arrayRemove([e])});
   }
+  Future rejectinvite(String classid,String studentid,Map e )async{
+    await classrooms.doc(classid).update({'invited':FieldValue.arrayRemove([studentid])});
+    await notifications.doc(studentid).update({'notifications':FieldValue.arrayRemove([e])});
+  }
+  Future accpetrequest(String classid,String studentid )async{
+    await classrooms.doc(classid).update({'students':FieldValue.arrayUnion([studentid]),'requested':FieldValue.arrayRemove([studentid])});
+  }
+  Future rejectrequest(String classid,String studentid )async{
+    await classrooms.doc(classid).update({'requested':FieldValue.arrayRemove([studentid])});
+  }
 }

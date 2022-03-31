@@ -56,14 +56,14 @@ class _studentshomeState extends State<studentshome> {
 
 
             BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: "Classes",
+              icon: Icon(Icons.assignment),
+              label: "Quizzes",
 
             ),
 
             BottomNavigationBarItem(
-              icon: Icon(Icons.assignment),
-              label: "Quizzes",
+              icon: Icon(Icons.insert_chart),
+              label: "Statistics",
 
             )
           ],

@@ -110,7 +110,7 @@ class _accountselectState extends State<accountselect> {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              "Sign Up",
+                              "Sign in",
                               style: TextStyle(color: Colors.blue),
                             ))
                       ],

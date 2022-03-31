@@ -131,8 +131,8 @@ class _chatlistsState extends State<chatlists> {
                                                 Row(
                                                   children: [
                                                     Container(
-                                                      height: 80,
-                                                      width: 80,
+                                                      height: MediaQuery.of(context).size.width*0.15,
+                                                      width: MediaQuery.of(context).size.width*0.15,
                                                       decoration: BoxDecoration(
                                                           shape: BoxShape.circle,
                                                           color: Colors.white,
@@ -308,8 +308,8 @@ class _chatlistsState extends State<chatlists> {
                                                       Row(
                                                         children: [
                                                           Container(
-                                                            height: 80,
-                                                            width: 80,
+                                                            height: MediaQuery.of(context).size.width*0.15,
+                                                            width: MediaQuery.of(context).size.width*0.15,
                                                             decoration: BoxDecoration(
                                                                 shape: BoxShape.circle,
                                                                 color: Colors.white,

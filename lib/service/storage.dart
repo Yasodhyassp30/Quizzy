@@ -4,23 +4,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
+
 class cloudstorage{
   FirebaseStorage ? store=FirebaseStorage.instance;
   FirebaseAuth _auth =FirebaseAuth.instance;
   UploadTask ? upload;
+  DownloadTask ? downloadTask;
 
   Future uploadmaterials(File file,String uid,String message,String Title,String filename,String date)async{
     upload = store!.ref('edu/${uid}/${date+filename}').putFile(file);
     upload!.whenComplete(()async{
-      var ref = await FirebaseStorage.instance.ref().child('edu/${uid}/${date+filename}');
-
-      var downloadlink =await ref.getDownloadURL();
       FirebaseFirestore lms =FirebaseFirestore.instance;
       await lms.collection('LMS').doc(uid).set({
         'materials':FieldValue.arrayUnion([{
           'title':Title,
+          'filename':filename,
           'message':message,
-          'downloadURL':downloadlink,
+          'path':'edu/${uid}/${date+filename}',
           'date':DateTime.now().toString()
         }])
 
@@ -33,6 +34,29 @@ class cloudstorage{
 
 
 
+  }
+
+  Future downloadmaterials(String uid,String path,String filename)async{
+    Directory d1 =Directory('/storage/emulated/0/Download/Qiuzzy');
+    String putfile ="";
+    if(!await d1.exists()){
+      d1.create();
+    }
+      putfile ='/storage/emulated/0/Download/Qiuzzy/${uid+filename}';
+
+    File downloadToFile = await File(putfile);
+    downloadTask= store!.ref(path).writeToFile(downloadToFile);
+    return downloadToFile.path;
+
+  }
+
+  Future deletematerirals(String uid,String path,Map e)async{
+    FirebaseFirestore lms =FirebaseFirestore.instance;
+    await lms.collection('LMS').doc(uid).update({
+      'materials':FieldValue.arrayRemove([e])
+
+    });
+    await store!.ref(path).delete();
   }
 }
 

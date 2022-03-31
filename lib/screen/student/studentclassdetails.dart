@@ -1,3 +1,4 @@
+import 'package:cloud/screen/student/studentLMS.dart';
 import 'package:cloud/screen/teachers/classdetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,7 @@ class _studentclassdetailsState extends State<studentclassdetails> {
           } else {
             studentdata = snapshot.data!.docs;
             return Scaffold(
+
                 body: ConstrainedBox(
                   constraints: new BoxConstraints(
                     minHeight: MediaQuery
@@ -116,8 +118,8 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                   Row(
                                                     children: [
                                                       Container(
-                                                        height: 80,
-                                                        width: 80,
+                                                        height: MediaQuery.of(context).size.width*0.15,
+                                                        width: MediaQuery.of(context).size.width*0.15,
                                                         decoration: BoxDecoration(
                                                             shape: BoxShape
                                                                 .circle,
@@ -183,6 +185,7 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                         color: Colors
                                                             .lightBlue[100],
                                                       )),
+
                                                       IconButton(
                                                           onPressed: () {
 
@@ -241,8 +244,8 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                       Row(
                                                         children: [
                                                           Container(
-                                                            height: 80,
-                                                            width: 80,
+                                                            height: MediaQuery.of(context).size.width*0.15,
+                                                            width: MediaQuery.of(context).size.width*0.15,
                                                             decoration: BoxDecoration(
                                                                 shape: BoxShape
                                                                     .circle,
@@ -359,10 +362,24 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                       style: ElevatedButton.styleFrom(
                                         shape: CircleBorder(),
                                         padding: EdgeInsets.all(20),
-                                        primary: Colors.cyan[300],
+                                        primary: Colors.lightBlue[300],
                                         onPrimary: Colors.yellow,
                                       ),
                                     ),
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => lmsstudents(classdetails: widget.classdetails,)));
+                                        }, child: Icon(
+                                      Icons.my_library_books_outlined,
+                                      size: 30,
+
+                                    ),
+                                      style: ElevatedButton.styleFrom(
+                                        shape: CircleBorder(),
+                                        padding: EdgeInsets.all(20),
+                                        primary: Colors.lightBlue[600],
+                                        onPrimary: Colors.white,
+                                      ),),
 
                                     ElevatedButton(
                                       onPressed: () {},
@@ -371,7 +388,7 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                       style: ElevatedButton.styleFrom(
                                         shape: CircleBorder(),
                                         padding: EdgeInsets.all(20),
-                                        primary: Colors.deepPurpleAccent,
+                                        primary: Colors.lightBlue[900],
                                         onPrimary: Colors.red,
                                       ),
                                     ),

@@ -11,16 +11,16 @@ import 'package:open_file/open_file.dart';
 import '../student/materialupload.dart';
 
 
-class lmsteachers extends StatefulWidget {
+class lmsstudents extends StatefulWidget {
   final classdetails;
-  const lmsteachers({Key? key,this.classdetails}) : super(key: key);
+  const lmsstudents({Key? key,this.classdetails}) : super(key: key);
 
 
   @override
-  _lmsteachersState createState() => _lmsteachersState();
+  _lmsstudentsState createState() => _lmsstudentsState();
 }
 
-class _lmsteachersState extends State<lmsteachers> {
+class _lmsstudentsState extends State<lmsstudents> {
   FirebaseFirestore store =FirebaseFirestore.instance;
   cloudstorage c1 =cloudstorage();
   FirebaseAuth _auth =FirebaseAuth.instance;
@@ -67,25 +67,19 @@ class _lmsteachersState extends State<lmsteachers> {
               });
 
             });
+
+
+
+
+          }
           setState(() {
             downloadstart=false;
+            downloadlist=[];
           });
-
-
-
-        }}:null,
+        }:null,
         child: Icon(Icons.download),
 
-      ):FloatingActionButton(
-        onPressed: ()async{
-          await Navigator.push(context, MaterialPageRoute(builder: (context)=>materialupload(classdata: widget.classdetails,)));
-          setState(() {
-
-          });
-        },
-        child: Icon(Icons.cloud_upload),
-
-      ),
+      ):null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ConstrainedBox(
         constraints: new BoxConstraints(
@@ -96,7 +90,7 @@ class _lmsteachersState extends State<lmsteachers> {
           color: Colors.lightBlue[100],
           child: SafeArea(
             child: Container(
-              
+
               child: Column(
                 children: [
                   Container(
@@ -216,51 +210,6 @@ class _lmsteachersState extends State<lmsteachers> {
                                                         primary: Colors.blue,
                                                         onPrimary: Colors.white,
                                                       ),),
-                                                      ElevatedButton(onPressed: ()async{
-                                                       await showDialog(context: context, builder: (BuildContext context) {
-                                                          return  AlertDialog(
-                                                            title: Text("Error"),
-                                                            content: Text(
-                                                                'Unable to find the file,may be deleted Please download again'
-                                                            ),
-                                                            actions: [
-                                                              Container(
-                                                                  padding: EdgeInsets.all(10),
-                                                                  child:Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                    children: [
-                                                                      TextButton(
-                                                                        onPressed: ()async{
-                                                                          await c1.deletematerirals(widget.classdetails.id, lmsdocs[i]['path'], lmsdocs[i]);
-
-                                                                          Navigator.pop(context);
-                                                                        },
-                                                                        child: Text('Confirm',style: TextStyle(fontSize: 18),),
-                                                                      ),
-                                                                      TextButton(
-                                                                        onPressed: (){
-
-
-                                                                          Navigator.pop(context);
-                                                                        },
-                                                                        child: Text('Cancel',style: TextStyle(fontSize: 18)),
-                                                                      )
-                                                                    ],
-                                                                  )
-                                                              )
-                                                            ],
-                                                          );
-                                                        });
-                                                       setState(() {
-
-                                                       });
-
-                                                      }, child:Icon(Icons.delete),style: ElevatedButton.styleFrom(
-                                                        shape: CircleBorder(),
-                                                        padding: EdgeInsets.all(10),
-                                                        primary: Colors.redAccent,
-                                                        onPrimary: Colors.white,
-                                                      ),)
                                                     ],
                                                   ),
                                                 )
