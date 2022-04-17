@@ -50,7 +50,6 @@ class _loginState extends State<login> {
                           color: Colors.lightBlue[200],
                         ),
                         child:  Container(
-                          height: MediaQuery.of(context).size.height*0.6,
                           padding: EdgeInsets.all(16),
                           child: Column(
                             children: [

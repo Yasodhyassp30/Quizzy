@@ -38,7 +38,6 @@ class _messagingprivateState extends State<messagingprivate> {
                    Positioned(
                      top: 0,
                      child:  Container(
-                       height: MediaQuery.of(context).size.height*0.1,
                        width: MediaQuery.of(context).size.width,
                        color: Colors.blue,
                        padding: EdgeInsets.all(16),
@@ -46,7 +45,7 @@ class _messagingprivateState extends State<messagingprivate> {
                          children: [
                            IconButton(onPressed: (){Navigator.pop(context);} , icon: Icon(Icons.arrow_back,size: 30,color: Colors.white,)),
                            SizedBox(width: 10,),
-                           Text(widget.reciver['firstname']+" "+widget.reciver['lastname'],style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 25,color: Colors.white)),),
+                           Text(widget.reciver['firstname']+" "+widget.reciver['lastname'],style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 25,color: Colors.white)),overflow: TextOverflow.clip,),
                          ],
                        ),
                      ),

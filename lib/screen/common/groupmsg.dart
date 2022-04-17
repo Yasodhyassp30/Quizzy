@@ -39,7 +39,6 @@ class _groupmsgingState extends State<groupmsging> {
                     Positioned(
                       top: 0,
                       child:  Container(
-                        height: MediaQuery.of(context).size.height*0.1,
                         width: MediaQuery.of(context).size.width,
                         color: Colors.blue,
                         padding: EdgeInsets.all(16),

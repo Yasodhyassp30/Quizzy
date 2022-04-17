@@ -58,7 +58,6 @@ class _chatstudentsState extends State<chatstudents> {
                     children: [
                       Container(
                         padding: EdgeInsets.all(25),
-                        height: MediaQuery.of(context).size.height*0.1,
                         decoration: BoxDecoration(
                           color: Colors.blue[500],
                           borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),

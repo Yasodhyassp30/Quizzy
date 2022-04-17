@@ -57,7 +57,6 @@ class _studentaddState extends State<studentadd> {
                         children: [
                           Container(
                             padding: EdgeInsets.all(25),
-                            height: MediaQuery.of(context).size.height*0.1,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),
@@ -232,7 +231,6 @@ class _studentaddState extends State<studentadd> {
                           Text('Invite by code',style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 25,color: Colors.blue[600])),),
                          SizedBox(height: 10,),
                          Container(
-                           height: MediaQuery.of(context).size.height*0.1,
                            width: MediaQuery.of(context).size.width*0.9,
                            decoration: BoxDecoration(
                              color: Colors.blue[300],

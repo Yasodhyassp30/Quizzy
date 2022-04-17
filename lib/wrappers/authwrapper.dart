@@ -21,7 +21,7 @@ class _authwrapperState extends State<authwrapper> {
   @override
 
   Widget build(BuildContext context) {
-    final currentuser =Provider.of<User?>(context);;
+    final currentuser =Provider.of<User?>(context);
 
     if(currentuser==null){
       return login();

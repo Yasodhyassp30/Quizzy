@@ -104,7 +104,6 @@ class _teacherclassesState extends State<teacherclasses> {
                       children: [
                         Container(
                             padding: EdgeInsets.all(25),
-                            height: MediaQuery.of(context).size.height*0.15,
                             decoration: BoxDecoration(
                               color: Colors.blue[500],
                               borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),

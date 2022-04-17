@@ -43,7 +43,6 @@ class _notifcationsstudentsState extends State<notifcationsstudents> {
 
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height*0.1,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),
                             color: Colors.blue

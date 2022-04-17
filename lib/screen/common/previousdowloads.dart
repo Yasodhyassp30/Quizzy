@@ -32,7 +32,6 @@ class _previousdownloadsState extends State<previousdownloads> {
                 children: [
                   Container(
                     padding: EdgeInsets.all(25),
-                    height: MediaQuery.of(context).size.height*0.1,
                     decoration: BoxDecoration(
                       color: Colors.blue[500],
 
@@ -66,7 +65,6 @@ class _previousdownloadsState extends State<previousdownloads> {
                         return Column(
                           children: [
                             Container(
-                              height: MediaQuery.of(context).size.height*0.2,
                               width: MediaQuery.of(context).size.width*0.9,
                               decoration: BoxDecoration(
                                   color: Colors.white,

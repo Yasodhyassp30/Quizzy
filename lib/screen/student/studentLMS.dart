@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:cloud/db/localDB.dart';
 import 'package:cloud/loadingscreens/loadingscreen.dart';
 import 'package:cloud/screen/common/previousdowloads.dart';
@@ -41,6 +43,9 @@ class _lmsstudentsState extends State<lmsstudents> {
     return Scaffold(
       floatingActionButton: (isdownloads)?FloatingActionButton(
         onPressed: (downloadlist.length>0&&!downloadstart)? ()async{
+          await Isolate.spawn((downloadlist) {
+
+          }, downloadlist);
           setState(() {
             downloadstart=true;
           });
@@ -158,7 +163,6 @@ class _lmsstudentsState extends State<lmsstudents> {
                                   child:Column(
                                     children: [
                                       Container(
-                                        height: MediaQuery.of(context).size.height*0.2,
                                         width: MediaQuery.of(context).size.width*0.9,
                                         decoration: BoxDecoration(
                                             color: Colors.white,
