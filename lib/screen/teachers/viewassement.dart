@@ -121,6 +121,7 @@ class _quizviewState extends State<quizview> {
                                   child: TextButton(
                                       onPressed: (){
                                         Map quizdata =test[i].data() as Map;
+                                        quizdata['quizid']=test[i].id;
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=>viewpaper(quizdetails: quizdata,)));
                                       },
                                     child: Text('View'),

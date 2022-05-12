@@ -859,9 +859,7 @@ class _addquestionsState extends State<addquestions> {
                                       .pickFiles(
                                     type: FileType.custom,
                                     allowedExtensions: [
-                                      'pdf',
-                                      'docx',
-                                      'pptx'
+                                      'pdf'
                                     ],
                                   );
                                   setState((){});

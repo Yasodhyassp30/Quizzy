@@ -57,6 +57,8 @@ class cloudstorage{
       }, SetOptions(merge: true));
     }
   }
+
+
   Future uploadmaterials(File file,String uid,String message,String Title,String filename,String date)async{
     upload = store!.ref('edu/${uid}/${date+filename}').putFile(file);
    await  upload!.whenComplete(()async{
@@ -79,10 +81,13 @@ class cloudstorage{
 
   }
   Future uploadquizmaterials(File file,String uid,String message,String filename,String date)async{
-    upload = store!.ref('quiz/${uid}/${date+filename}').putFile(file);
+    var ref = store!.ref('quiz/${uid}/${date+filename}');
+    upload =ref.putFile(file);
     await upload!.whenComplete(()async{
       FirebaseFirestore lms =FirebaseFirestore.instance;
+      String url =await ref.getDownloadURL();
       await lms.collection('Quizzes').doc(uid).update({
+          'URL':url,
           'filename':filename,
           'message':message,
           'path':'quiz/${uid}/${date+filename}',
