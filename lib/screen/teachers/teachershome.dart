@@ -1,5 +1,6 @@
 import 'package:cloud/screen/common/chatlist.dart';
 import 'package:cloud/screen/teachers/quizzestecher.dart';
+import 'package:cloud/screen/teachers/stats_page.dart';
 import 'package:cloud/screen/teachers/teachersclasses.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class _teachershomeState extends State<teachershome> {
   static const List<Widget> _options=<Widget>[
     teacherclasses(),
     chatlists(),
-    typeselection()
+    typeselection(),
+    stats_page()
 
 
   ];

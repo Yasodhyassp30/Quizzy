@@ -3,7 +3,9 @@ import 'package:cloud/screen/common/groupmsg.dart';
 import 'package:cloud/screen/common/messaging.dart';
 import 'package:cloud/screen/student/materialupload.dart';
 import 'package:cloud/screen/teachers/addstudent.dart';
+import 'package:cloud/screen/teachers/studentsdetails.dart';
 import 'package:cloud/screen/teachers/teachersLM.dart';
+import 'package:cloud/screen/teachers/teachershome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -92,7 +94,7 @@ class _classroomdetailsState extends State<classroomdetails> {
                                                             shape: BoxShape.circle,
                                                             color: Colors.white,
                                                             image: DecorationImage(
-                                                                image: AssetImage('assets/studentavatar.png'),
+                                                                image: (!studentdata[i].data().containsKey('pic'))?AssetImage('assets/studentavatar.png'):NetworkImage(studentdata[i].get('pic')) as ImageProvider,
                                                                 fit: BoxFit.fill
                                                             )
                                                         ),
@@ -117,8 +119,14 @@ class _classroomdetailsState extends State<classroomdetails> {
                                                       }, icon: Icon(
                                                         Icons.messenger,size: 30,color: Colors.lightBlue[100],
                                                       )),
-                                                      IconButton(onPressed: (){
+                                                      IconButton(onPressed: ()async{
+                                                        var wait =await Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(builder: (context) => studentdetails(details: studentdata[i],id: widget.classdetails.id,)),
+                                                        );
+                                                        setState(() {
 
+                                                        });
                                                       }, icon: Icon(
                                                         Icons.more_horiz,size: 30,color: Colors.lightBlue[100],
                                                       ))
@@ -187,8 +195,61 @@ class _classroomdetailsState extends State<classroomdetails> {
                                   ),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {},
-                                  child: Icon(Icons.more_horiz, color: Colors.white),
+                                  onPressed: ()async {
+                                    await showDialog(context: context, builder: (BuildContext context) {
+                                      return  AlertDialog(
+                                        title: Text("Alert"),
+                                        content: Text(
+                                            'All group details will be removed do you want to proceed ?'
+                                        ),
+                                        actions: [
+                                          Container(
+                                              padding: EdgeInsets.all(10),
+                                              child:Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: ()async{
+                                                      await store.collection('classrooms').doc(widget.classdetails.id).delete();
+                                                      QuerySnapshot quizzes =await store.collection('Quizzes').where('classroomid',isEqualTo: widget.classdetails.id).get();
+                                                      List ids =[];
+                                                      quizzes.docs.forEach((element) {
+                                                        ids.add(element.id);
+                                                      });
+                                                      ids.forEach((element) async{
+                                                        await store.collection('Quizzes').doc(element).delete();
+                                                        await store.collection('assements').doc(element).delete();
+                                                        await store.collection('answers').doc(element).delete();
+                                                        await store.collection('stats').doc(element).delete();
+                                                        await store.collection('studentquiz').doc(element).delete();
+                                                        await store.collection('messages').doc(element).delete();
+                                                      });
+                                                      Navigator.pushAndRemoveUntil(context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  teachershome()), (
+                                                              route) => false);
+                                                    },
+                                                    child: Text('Confirm',style: TextStyle(fontSize: 18),),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: ()async{
+                                                     
+
+
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text('Cancel',style: TextStyle(fontSize: 18)),
+                                                  )
+                                                ],
+                                              )
+                                          )
+                                        ],
+                                      );
+                                    });
+
+                                  },
+                                  child: Icon(Icons.delete, color: Colors.white),
                                   style: ElevatedButton.styleFrom(
                                     shape: CircleBorder(),
                                     padding: EdgeInsets.all(20),

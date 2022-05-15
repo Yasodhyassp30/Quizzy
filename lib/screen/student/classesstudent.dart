@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../common/accountdetails.dart';
 import '../login.dart';
 import '../teachers/classdetails.dart';
 
@@ -65,18 +66,28 @@ class _studentclassesState extends State<studentclasses> {
                             ),
                             child:Row(
                               children: [
-                                Container(
-                                  height: MediaQuery.of(context).size.width*0.15,
-                                  width: MediaQuery.of(context).size.width*0.15,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/studentavatar.png'),
-                                          fit: BoxFit.fill
-                                      )
-                                  ),
-                                ),
+                               GestureDetector(
+                                 child:  Container(
+                                   height: MediaQuery.of(context).size.width*0.15,
+                                   width: MediaQuery.of(context).size.width*0.15,
+                                   decoration: BoxDecoration(
+                                       shape: BoxShape.circle,
+                                       color: Colors.white,
+                                       image: DecorationImage(
+                                           image: (_auth.currentUser?.photoURL != null)?NetworkImage(_auth.currentUser!.photoURL!):AssetImage('assets/studentavatar.png') as ImageProvider,
+                                           fit: BoxFit.cover
+                                       )
+                                   ),
+                                 ),
+                                 onTap: ()async{
+                                   DocumentSnapshot userdata = await  store.collection('userdata').doc(_auth.currentUser!.uid).get();
+                                   Map users =userdata.data() as Map;
+                                   var wait =await Navigator.push(context, MaterialPageRoute(builder: (context)=>account_details(user: users,)));
+                                   setState(() {
+
+                                   });
+                                 },
+                               ),
                                 SizedBox(width: 10,),
                                 Container(
                                   width: MediaQuery.of(context).size.width*0.3,
@@ -129,24 +140,7 @@ class _studentclassesState extends State<studentclasses> {
                                   }
                                 }),
                                 Expanded(child: SizedBox()),
-                                OutlinedButton(onPressed: ()async{
-                                  FirebaseAuth _auth =FirebaseAuth.instance;
-                                  await _auth.signOut();
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>login(),
-                                    ),
-                                        (route) => false,
-                                  );
-                                }, child: Text('Sign out',style: TextStyle(
-                                  color: Colors.white,
 
-                                ),),
-                                  style: OutlinedButton.styleFrom(
-                                    side: BorderSide(width: 2.0, color: Colors.white),
-                                  ),
-                                )
                               ],
                             )
                         ),

@@ -2,6 +2,7 @@ import 'package:cloud/screen/common/chatlist.dart';
 import 'package:cloud/screen/common/chatliststudent.dart';
 import 'package:cloud/screen/student/classesstudent.dart';
 import 'package:cloud/screen/student/quizselect.dart';
+import 'package:cloud/screen/student/student_stat_select.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,8 @@ class _studentshomeState extends State<studentshome> {
   static const List<Widget> _options=<Widget>[
     studentclasses(),
     chatstudents(),
-    selectquizzes()
+    selectquizzes(),
+    stats_page_std()
 
 
   ];

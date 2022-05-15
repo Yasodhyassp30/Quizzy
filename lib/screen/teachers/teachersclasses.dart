@@ -1,4 +1,5 @@
 import 'package:cloud/loadingscreens/loadingscreen.dart';
+import 'package:cloud/screen/common/accountdetails.dart';
 import 'package:cloud/screen/teachers/classdetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,16 +114,26 @@ class _teacherclassesState extends State<teacherclasses> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  height: MediaQuery.of(context).size.width*0.15,
-                                  width: MediaQuery.of(context).size.width*0.15,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/studentavatar.png'),
-                                          fit: BoxFit.fill
-                                      )
+                                GestureDetector(
+                                  onTap: ()async{
+                                    DocumentSnapshot userdata = await  store.collection('userdata').doc(_auth.currentUser!.uid).get();
+                                    Map users =userdata.data() as Map;
+                                    var wait =await Navigator.push(context, MaterialPageRoute(builder: (context)=>account_details(user: users,)));
+                                    setState(() {
+
+                                    });
+                                  },
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width*0.15,
+                                    width: MediaQuery.of(context).size.width*0.15,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                        image: DecorationImage(
+                                            image: (_auth.currentUser?.photoURL != null)?NetworkImage(_auth.currentUser!.photoURL!):AssetImage('assets/studentavatar.png') as ImageProvider,
+                                            fit: BoxFit.cover
+                                        )
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 10,),
@@ -138,24 +149,7 @@ class _teacherclassesState extends State<teacherclasses> {
                                   ),
                                 ),
                                 Expanded(child: SizedBox()),
-                                OutlinedButton(onPressed: ()async{
-                                  FirebaseAuth _auth =FirebaseAuth.instance;
-                                  await _auth.signOut();
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>login(),
-                                    ),
-                                        (route) => false,
-                                  );
-                                }, child: Text('Sign out',style: TextStyle(
-                                  color: Colors.white,
 
-                                ),),
-                                  style: OutlinedButton.styleFrom(
-                                    side: BorderSide(width: 2.0, color: Colors.white),
-                                  ),
-                                )
                               ],
                             )
                         ),
@@ -206,13 +200,13 @@ class _teacherclassesState extends State<teacherclasses> {
                                              ),
                                             Expanded(child: SizedBox()),
                                              IconButton(onPressed: ()async{
-                                              await Navigator.push(
+                                              var wait =await Navigator.push(
                                                  context,
                                                  MaterialPageRoute(builder: (context) => classroomdetails(classdetails: classdata[i],)),
                                                );
-                                               setState(() {
+                                              setState(() {
 
-                                               });
+                                              });
 
                                              }, icon: Icon(
                                                  Icons.more_horiz,size: 40,color: Colors.lightBlue[100],

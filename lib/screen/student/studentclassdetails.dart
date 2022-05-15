@@ -1,5 +1,5 @@
 import 'package:cloud/screen/student/studentLMS.dart';
-import 'package:cloud/screen/teachers/classdetails.dart';
+import 'package:cloud/screen/student/userdetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../loadingscreens/loadingscreen.dart';
 import '../common/groupmsg.dart';
 import '../common/messaging.dart';
-import '../teachers/addstudent.dart';
 
 class studentclassdetails extends StatefulWidget {
   final classdetails;
@@ -122,10 +121,9 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                             color: Colors
                                                                 .white,
                                                             image: DecorationImage(
-                                                                image: AssetImage(
-                                                                    'assets/studentavatar.png'),
+                                                                image: (!ownerdata.containsKey('pic'))?AssetImage('assets/studentavatar.png'):NetworkImage(ownerdata['pic']) as ImageProvider,
                                                                 fit: BoxFit
-                                                                    .fill
+                                                                    .cover
                                                             )
                                                         ),
                                                       ),
@@ -183,7 +181,14 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                       )),
 
                                                       IconButton(
-                                                          onPressed: () {
+                                                          onPressed: ()async {
+                                                            var wait =await Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(builder: (context) => userdetails(details: snapshotdata.data,id: widget.classdetails.id,)),
+                                                            );
+                                                            setState(() {
+
+                                                            });
 
                                                           }, icon: Icon(
                                                         Icons.more_horiz,
@@ -248,10 +253,9 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                                 color: Colors
                                                                     .white,
                                                                 image: DecorationImage(
-                                                                    image: AssetImage(
-                                                                        'assets/studentavatar.png'),
+                                                                    image: (!studentdata[i].data().containsKey('pic'))?AssetImage('assets/studentavatar.png'):NetworkImage(studentdata[i].get('pic')) as ImageProvider,
                                                                     fit: BoxFit
-                                                                        .fill
+                                                                        .cover
                                                                 )
                                                             ),
                                                           ),
@@ -317,8 +321,14 @@ class _studentclassdetailsState extends State<studentclassdetails> {
                                                                     .lightBlue[100],
                                                               )),
                                                               IconButton(
-                                                                  onPressed: () {
+                                                                  onPressed: () async{
+                                                                    var wait =await Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(builder: (context) => userdetails(details: studentdata[i],id: widget.classdetails.id,)),
+                                                                    );
+                                                                    setState(() {
 
+                                                                    });
                                                                   }, icon: Icon(
                                                                 Icons.more_horiz,
                                                                 size: 30,
