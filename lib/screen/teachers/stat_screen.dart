@@ -1,6 +1,7 @@
 import 'package:cloud/loadingscreens/loadingscreen.dart';
 import 'package:cloud/screen/teachers/studentanswers_stat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -73,6 +74,28 @@ class _stat_screenState extends State<stat_screen> {
                      ))
                    ],
                  ),
+               ),
+               Container(
+                 padding: EdgeInsets.all(10),
+                 child: Row(children: [
+                   Expanded(child: ElevatedButton.icon(
+                     icon: Icon(Icons.add_chart),
+                     onPressed: ()async{
+                       try{
+                         HttpsCallable eval = FirebaseFunctions.instanceFor(region: 'asia-southeast1').httpsCallable('stats');
+                         await eval({'quizid':widget.quizdetails.id});
+                       }catch(e){
+                         print(e.toString());
+                       }
+
+                     },
+                     label: Text("Generate Statistics"),
+                     style: ElevatedButton.styleFrom(
+                         padding: EdgeInsets.all(20),
+                         primary: Colors.green
+                     ),
+                   ))
+                 ],),
                ),
 
                (data!=null)?Container(
